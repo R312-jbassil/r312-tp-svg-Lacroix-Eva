@@ -31,3 +31,53 @@ import Layout from "../layouts/Layout.astro";
     </div>
   </div>
 </Layout>
+
+<script>
+  //@ts-nocheck
+
+  async function generateSVG(prompt) {
+    console.log("Generating SVG for prompt:", prompt);
+    const res = await fetch("/api/generateSVG", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
+    const data = await res.json();
+    return data.svg;
+  }
+
+  async function handleSubmit() {
+    const promptElement = document.getElementById("user-prompt");
+    const svgContainer = document.getElementById("svg-container");
+    const svgOutput = document.getElementById("svg-output");
+    const generateButton = document.getElementById("generate-button");
+
+    let prompt = promptElement ? promptElement.value : "";
+    console.log("submitted: ", prompt);
+
+    // --- spinner + désactivation du bouton ---
+    svgContainer.innerHTML = `<span class="loading loading-ring loading-xl"></span>`;
+    svgOutput.textContent = "";
+    generateButton.disabled = true;
+
+    try {
+      // appel à l'API backend
+      const svgCode = await generateSVG(prompt);
+      console.log("svgCode: ", svgCode);
+
+      // affichage du code et du rendu
+      svgOutput.textContent = svgCode;
+      svgContainer.innerHTML = svgCode;
+      generateButton.disabled = false;
+    } catch (error) {
+      console.error(error);
+      svgContainer.innerHTML = `<span class="loading loading-ring loading-xl"></span>`;
+      generateButton.disabled = true;
+    }
+  }
+
+  const generateButton = document.getElementById("generate-button");
+  if (generateButton) {
+    generateButton.addEventListener("click", handleSubmit);
+  }
+</script>
