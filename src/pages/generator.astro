@@ -28,6 +28,7 @@ import Layout from "../layouts/Layout.astro";
         placeholder="Décris ton SVG (ex: a red car)"
         class="textarea textarea-bordered flex-1 resize-none"></textarea>
       <button id="generate-button" class="btn btn-primary">Générer</button>
+      <button id="save-button" class="btn btn-secondary">Enregistrer</button>
     </div>
   </div>
 </Layout>
@@ -80,4 +81,47 @@ import Layout from "../layouts/Layout.astro";
   if (generateButton) {
     generateButton.addEventListener("click", handleSubmit);
   }
+
+  const saveButton = document.getElementById("save-button");
+
+  async function handleSave() {
+    const name = prompt("Nom du SVG à enregistrer ?");
+    if (!name) return;
+
+    const svgOutput = document.getElementById("svg-output").textContent;
+    if (!svgOutput) {
+      alert("Aucun SVG à enregistrer !");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        "http://127.0.0.1:8090/api/collections/svgs/records",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // "Authorization": "Bearer YOUR_POCKETBASE_API_KEY" // si ta collection nécessite un token
+          },
+          body: JSON.stringify({
+            name: name,
+            svg: svgOutput,
+          }),
+        }
+      );
+
+      if (res.ok) {
+        alert("SVG enregistré !");
+      } else {
+        const errorData = await res.json();
+        console.error(errorData);
+        alert("Erreur lors de l'enregistrement");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erreur réseau");
+    }
+  }
+
+  if (saveButton) saveButton.addEventListener("click", handleSave);
 </script>
