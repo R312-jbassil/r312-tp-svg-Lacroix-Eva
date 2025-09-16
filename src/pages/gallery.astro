@@ -17,12 +17,12 @@ const svgs = data.items || [];
             {svgs.map((s) => (
                 <div class="border rounded-xl p-4 bg-base-200" key={s.id}>
                     <h2 class="font-semibold mb-2">{s.name}</h2>
-                    <div class="svg-container mb-2" set:html={s.svg} />
+                    <div class="svg-container mb-2" set:html={s.svg}></div>
                     <pre class="bg-gray-100 p-2 rounded text-xs overflow-x-auto mb-2">{s.svg}</pre>
                     <button
                         class="btn btn-sm btn-outline"
-                        onClick={() => navigator.clipboard.writeText(s.svg)}
                         type="button"
+                        onclick={`navigator.clipboard.writeText(${JSON.stringify(s.svg)})`}
                     >
                         Copier le code SVG
                     </button>
