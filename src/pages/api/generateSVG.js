@@ -5,65 +5,46 @@ import { OpenAI } from 'openai';
 const HF_TOKEN = import.meta.env.HF_TOKEN;
 const NOM_MODEL = import.meta.env.NOM_MODEL;
 
-// Fonction exportée pour gérer les requêtes POST
 export const POST = async ({ request }) => {
-    try {
-        console.log('🚀 Nouvelle requête reçue sur /api/generateSVG');
-        console.log('📝 URL:', request.url);
-        console.log('🔧 Method:', request.method);
-        
-        // Extraction du prompt du corps de la requête
-        const { prompt } = await request.json();
-        console.log('💬 Prompt reçu:', prompt);
+    // Affiche la requête dans la console pour le débogage
+    console.log(request);
+
+    // Extraction des message du corps de la requête
+    const messages  = await request.json();
+    
     // Initialisation du client OpenAI avec l'URL de base et le token d'API
     const client = new OpenAI({
-      baseURL: import.meta.env.HF_URL,
-      apiKey: HF_TOKEN,
+        baseURL: import.meta.env.HF_URL, // URL de l'API
+        apiKey: HF_TOKEN, // Token d'accès pour l'API
     });
     
-    // ................
-    const chatCompletion = await client.chat.completions.create({
-    model: NOM_MODEL,
-    messages: [
-      {
-          role: "system", 
-          content: "You are an SVG code generator. Generate SVG code for the following prompt." 
-      },
+    // Création du message système pour guider le modèle
+    let SystemMessage = 
         {
-            role: "user",
-            content: prompt,    
-        },
-    ],
-  });
-    // ...............
-
+            role: "system", // Rôle du message
+            content: "You are an SVG code generator. Generate SVG code for the following messages. Make sure to include ids for each part of the generated SVG.", // Contenu du message
+        };
+    
+    // Appel à l'API pour générer le code SVG en utilisant le modèle spécifié
+    const chatCompletion = await client.chat.completions.create({
+        model: "Qwen/Qwen3-Next-80B-A3B-Instruct:novita", // Nom du modèle à utiliser
+        messages: [SystemMessage, ...messages] // Messages envoyés au modèle, incluant le message système et l'historique des messages
+    });
+    
     // Récupération du message généré par l'API
-    const message = chatCompletion.choices[0].message.content || "";
-    console.log('🤖 Réponse de l\'IA:', message);
+    const message = chatCompletion.choices[0].message || "";
+    
+    // Affiche le message généré dans la console pour le débogage
+    console.log("Generated SVG:", message);
     
     // Recherche d'un élément SVG dans le message généré
-    const svgMatch = message.match(/<svg[\s\S]*?<\/svg>/i);
+    const svgMatch = message.content.match(/<svg[\s\S]*?<\/svg>/i);
     
-    if (svgMatch) {
-        console.log('✅ SVG trouvé et extrait avec succès');
-    } else {
-        console.log('❌ Aucun SVG trouvé dans la réponse');
-    }
+    // Si un SVG est trouvé, le remplace dans le message, sinon laisse une chaîne vide
+    message.content = svgMatch ? svgMatch[0] : "";
     
-    // Retourne une réponse JSON contenant le SVG ou une chaîne vide si aucun SVG n'est trouvé
-    console.log('📤 Envoi de la réponse au client');
-    return new Response(JSON.stringify({ svg: svgMatch ? svgMatch[0] : "" }), {
-      headers: { "Content-Type": "application/json" },
+    // Retourne une réponse JSON contenant le SVG généré
+    return new Response(JSON.stringify({ svg: message }), {
+        headers: { "Content-Type": "application/json" }, // Définit le type de contenu de la réponse
     });
-    
-    } catch (error) {
-        console.error('❌ Erreur dans l\'API generateSVG:', error);
-        return new Response(JSON.stringify({ 
-            error: 'Erreur lors de la génération du SVG',
-            details: error.message 
-        }), {
-            status: 500,
-            headers: { "Content-Type": "application/json" },
-        });
-    }
 };
