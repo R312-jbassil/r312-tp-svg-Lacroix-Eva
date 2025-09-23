@@ -79,52 +79,47 @@ import Layout from "../layouts/Layout.astro";
     generateButton.disabled = false;
     editButton.disabled = false;
   }
-  
+
   const generateButton = document.getElementById("generate-button");
   if (generateButton) {
     generateButton.addEventListener("click", handleSubmit);
   }
 
+  // Fonction utilitaire pour sauvegarder le SVG
   const saveButton = document.getElementById("save-button");
 
-  async function handleSave() {
-    const name = prompt("Nom du SVG à enregistrer ?");
-    if (!name) return;
-
-    const svgOutput = document.getElementById("svg-output").textContent;
-    if (!svgOutput) {
-      alert("Aucun SVG à enregistrer !");
-      return;
-    }
-
-    try {
-      const res = await fetch(
-        "http://127.0.0.1:8090/api/collections/svgs/records",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // "Authorization": "Bearer YOUR_POCKETBASE_API_KEY" // si ta collection nécessite un token
-          },
-          body: JSON.stringify({
-            name: name,
-            svg: svgOutput,
-          }),
-        }
-      );
-
-      if (res.ok) {
-        alert("SVG enregistré !");
-      } else {
-        const errorData = await res.json();
-        console.error(errorData);
-        alert("Erreur lors de l'enregistrement");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Erreur réseau");
-    }
+  async function saveSVG(params) {
+    // Envoi de la requête à notre endpoint
+    const res = await fetch("/api/saveSVG", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    });
+    return await res.json();
   }
 
-  if (saveButton) saveButton.addEventListener("click", handleSave);
+  // Gestionnaire d'événements pour le bouton de sauvegarde
+  if (saveButton) {
+    saveButton.addEventListener("click", async () => {
+      // Demande du nom du SVG à l'utilisateur
+      const name = prompt("Donnez un nom à votre création :");
+      const svgOutput = document.getElementById("svg-output")?.textContent;
+      console.log("Préparation de la sauvegarde :", JSON.stringify(svgOutput));
+
+      // Préparation des données pour la sauvegarde
+      const params = {
+        name: name,
+        code_svg: svgOutput || "<svg></svg>", // SVG par défaut si vide
+        chat_history: JSON.stringify(promptList), // Historique des échanges
+      };
+
+      // Sauvegarde et gestion de la réponse
+      const result = await saveSVG(params);
+      if (result.success) {
+        alert("SVG sauvegardé avec succès !");
+      } else {
+        alert("Erreur lors de la sauvegarde : " + result.error);
+      }
+    });
+  }
 </script>
