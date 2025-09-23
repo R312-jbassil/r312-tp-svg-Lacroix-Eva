@@ -71,15 +71,6 @@ try {
             return data.svg.content || "";
         }
 
-        async function update(updatedData) {
-            const response = await fetch("/api/updateSVG", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedData),
-            });
-            return response.json();
-        }
-
         form?.addEventListener("submit", async (e) => {
             e.preventDefault();
             const formData = new FormData(form);
@@ -121,20 +112,6 @@ try {
                     <div class="chat-footer opacity-60 text-xs mt-1">assistant</div>
                 </div>
             `;
-
-            // Mise à jour dans PocketBase
-            const response = await update({
-                id: formData.get("id"),
-                code_svg: svgCode,
-                chat_history: JSON.stringify(history),
-            });
-
-            if (response.success) {
-                console.log("✅ SVG mis à jour !");
-            } else {
-                console.error("❌ Erreur update:", response.error);
-            }
-
             form.reset();
         });
     </script>
