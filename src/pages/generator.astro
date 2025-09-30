@@ -1,8 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+import { ui } from "../i18n/ui.js";
+
+const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
 ---
 
-<Layout>
+<Layout title={ui[locale].generator.title}>
   <div class="flex flex-col h-screen p-4 gap-4">
 
     <div class="flex flex-1 gap-4">
@@ -11,7 +15,7 @@ import Layout from "../layouts/Layout.astro";
         id="svg-container"
         class="flex-1 border rounded-xl p-4 bg-base-200 flex items-center justify-center"
       >
-        <span class="text-gray-400">SVG généré apparaîtra ici</span>
+        <span class="text-gray-400">{ui[locale].generator.contentPlaceholder}</span>
       </div>
 
       <div class="flex-1 border rounded-xl p-4 bg-base-200 overflow-auto">
@@ -23,11 +27,17 @@ import Layout from "../layouts/Layout.astro";
     <div class="border rounded-xl p-4 bg-base-100 flex gap-2">
       <textarea
         id="user-prompt"
-        placeholder="Décris ton SVG (ex: a red car)"
+        placeholder={ui[locale].generator.promptLabel}
         class="textarea textarea-bordered flex-1 resize-none"></textarea>
-      <button id="generate-button" class="btn btn-primary">Générer</button>
-      <button id="save-button" class="btn btn-secondary">Enregistrer</button>
-      <button class="btn btn-secondary m-2" id="edit-button">Edit</button>
+      <button id="generate-button" class="btn btn-primary">
+        {ui[locale].generator.generateButton}
+      </button>
+      <button id="save-button" class="btn btn-secondary">
+        {ui[locale].generator.saveButton}
+      </button>
+      <button class="btn btn-info" id="edit-button">
+        {ui[locale].generator.editButton}
+      </button>
     </div>
   </div>
 </Layout>
