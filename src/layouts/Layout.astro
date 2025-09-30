@@ -19,12 +19,18 @@ const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
       <nav class="navbar bg-base-200 shadow-md px-6">
         
         <div class="flex-1">
-          <a href="/" class="btn btn-ghost text-xl">Accueil</a>
+          <a href="/" class="btn btn-ghost text-xl">
+            {ui[locale].nav.home}
+          </a>
         </div>
 
         <div class="flex-none flex gap-2">
-          <a href="/generator" class="btn btn-secondary">Générateur</a>
-          <a href="/gallery" class="btn btn-secondary">Galerie</a>
+          <a href="/generator" class="btn btn-secondary">
+            {ui[locale].nav.generator}
+          </a>
+          <a href="/gallery" class="btn btn-secondary">
+            {ui[locale].nav.gallery}
+          </a>
 
             <form method="POST" action={Astro.url.pathname}>
             <select
