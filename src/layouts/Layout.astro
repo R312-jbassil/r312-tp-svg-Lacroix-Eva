@@ -1,8 +1,11 @@
 ---
 import "../styles/global.css";
+import { ui } from "../i18n/ui.js";
+const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
 ---
+
 <!doctype html>
-<html lang="en" data-theme="Eva" class="h-full">
+<html lang={locale} data-theme="Eva" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -10,18 +13,35 @@ import "../styles/global.css";
     <meta name="generator" content={Astro.generator} />
     <title>Astro Basics</title>
   </head>
+
   <body class="h-full">
     <header>
       <nav class="navbar bg-base-200 shadow-md px-6">
+        
         <div class="flex-1">
           <a href="/" class="btn btn-ghost text-xl">Accueil</a>
         </div>
+
         <div class="flex-none flex gap-2">
-          <a href="/generator" class="btn btn-secondary">Generator</a>
-          <a href="/gallery" class="btn btn-secondary">Gallery</a>
+          <a href="/generator" class="btn btn-secondary">Générateur</a>
+          <a href="/gallery" class="btn btn-secondary">Galerie</a>
+
+            <form method="POST" action={Astro.url.pathname}>
+            <select
+              name="language"
+              class="select"
+              onchange="this.form.submit()"
+            >
+              <option disabled>{ui[locale].nav.language}</option>
+              <option value="en" selected={locale === "en"}>English</option>
+              <option value="fr" selected={locale === "fr"}>Français</option>
+            </select>
+            </form>
+
         </div>
       </nav>
     </header>
+
     <div class="h-full flex flex-col min-h-0">
       <div class="flex-1 min-h-0">
         <slot />
@@ -30,7 +50,7 @@ import "../styles/global.css";
 
     <footer class="footer footer-center p-4 bg-base-200 text-base-content">
       <div>
-        <p>© 2024 Astro Basics — Lacroix Eva TP3</p>
+        <p>© 2024 Astro Basics — Lacroix Eva TPs</p>
       </div>
     </footer>
   </body>

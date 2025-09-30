@@ -4,9 +4,9 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout>
   <div class="flex flex-col h-screen p-4 gap-4">
-    <!-- Zone principale avec affichage et code -->
+
     <div class="flex flex-1 gap-4">
-      <!-- Affichage SVG -->
+
       <div
         id="svg-container"
         class="flex-1 border rounded-xl p-4 bg-base-200 flex items-center justify-center"
@@ -14,14 +14,12 @@ import Layout from "../layouts/Layout.astro";
         <span class="text-gray-400">SVG généré apparaîtra ici</span>
       </div>
 
-      <!-- Code généré -->
       <div class="flex-1 border rounded-xl p-4 bg-base-200 overflow-auto">
         <pre id="svg-output" class="whitespace-pre-wrap text-sm text-primary">
         </pre>
       </div>
     </div>
 
-    <!-- Zone du prompt -->
     <div class="border rounded-xl p-4 bg-base-100 flex gap-2">
       <textarea
         id="user-prompt"
