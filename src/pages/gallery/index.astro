@@ -2,17 +2,19 @@
 import Layout from "../../layouts/Layout.astro";
 import pb from "../../utils/pb";
 import { Collections } from "../../utils/pocketbase-types";
+import { ui } from "../../i18n/ui.js";
 
+const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
 
 const svgs = await pb.collection(Collections.Svgs).getFullList();
 ---
 
-<Layout>
-  <h1 class="text-2xl font-bold mb-4">Mes SVG enregistrés</h1>
+<Layout title="{ui[locale].gallery.title}">
+  <h1 class="text-2xl font-bold mb-4">{ui[locale].gallery.title}</h1>
 
   {
     svgs.length === 0 ? (
-      <p class="text-gray-500">Aucun SVG enregistré pour le moment.</p>
+      <p class="text-gray-500">{ui[locale].gallery.noSvgs}</p>
     ) : (
       <div class="grid grid-cols-2 gap-4">
         {svgs.map((s) => (
@@ -22,18 +24,17 @@ const svgs = await pb.collection(Collections.Svgs).getFullList();
             <pre class="bg-gray-100 p-2 rounded text-xs overflow-x-auto mb-2">
               {s.code_svg}
             </pre>
+
             <button
               class="btn btn-sm btn-outline"
               type="button"
               onclick={`navigator.clipboard.writeText(${JSON.stringify(s.code_svg)})`}
             >
-              Copier le code SVG
+              {ui[locale].gallery.copyButton}
             </button>
-            <a
-              class="btn btn-sm btn-primary ml-2"
-              href={`/gallery/${s.id}`}
-            >
-              Voir le détail
+
+            <a class="btn btn-sm btn-primary ml-2" href={`/gallery/${s.id}`}>
+              {ui[locale].gallery.viewDetails}
             </a>
           </div>
         ))}

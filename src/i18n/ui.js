@@ -24,6 +24,8 @@ export const ui = {
     gallery: {
         title: 'SVG Gallery',
         viewDetails: 'View Details',
+        noSvgs: 'No SVGs saved yet.',
+        copyButton: 'Copy SVG Code',
     }
   },
   fr: {
@@ -51,6 +53,8 @@ export const ui = {
     gallery: {
         title: 'Galerie SVG',
         viewDetails: 'Voir les détails',
+        noSvgs: 'Aucun SVG enregistré pour le moment.',
+        copyButton: 'Copier le code SVG',
     }
   },
 } 
