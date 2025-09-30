@@ -7,26 +7,30 @@ const svgs = await pb.collection(Collections.Svgs).getFullList();
 ---
 
 <Layout>
-    <h1 class="text-2xl font-bold mb-4">Mes SVG enregistrés</h1>
+  <h1 class="text-2xl font-bold mb-4">Mes SVG enregistrés</h1>
 
-    {svgs.length === 0 ? (
-        <p class="text-gray-500">Aucun SVG enregistré pour le moment.</p>
+  {
+    svgs.length === 0 ? (
+      <p class="text-gray-500">Aucun SVG enregistré pour le moment.</p>
     ) : (
-        <div class="grid grid-cols-2 gap-4">
-            {svgs.map((s) => (
-                <div class="border rounded-xl p-4 bg-base-200">
-                    <h2 class="font-semibold mb-2">{s.name}</h2>
-                    <div class="svg-container mb-2" set:html={s.code_svg}></div>
-                    <pre class="bg-gray-100 p-2 rounded text-xs overflow-x-auto mb-2">{s.code_svg}</pre>
-                    <button
-                        class="btn btn-sm btn-outline"
-                        type="button"
-                        onclick={`navigator.clipboard.writeText(${JSON.stringify(s.code_svg)})`}
-                    >
-                        Copier le code SVG
-                    </button>
-                </div>
-            ))}
-        </div>
-    )}
+      <div class="grid grid-cols-2 gap-4">
+        {svgs.map((s) => (
+          <div class="border rounded-xl p-4 bg-base-200">
+            <h2 class="font-semibold mb-2">{s.name}</h2>
+            <div class="svg-container mb-2" set:html={s.code_svg} />
+            <pre class="bg-gray-100 p-2 rounded text-xs overflow-x-auto mb-2">
+              {s.code_svg}
+            </pre>
+            <button
+              class="btn btn-sm btn-outline"
+              type="button"
+              onclick={`navigator.clipboard.writeText(${JSON.stringify(s.code_svg)})`}
+            >
+              Copier le code SVG
+            </button>
+          </div>
+        ))}
+      </div>
+    )
+  }
 </Layout>
