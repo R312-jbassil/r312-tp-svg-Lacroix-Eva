@@ -2,6 +2,9 @@
 import Layout from "../../layouts/Layout.astro";
 import pb from "../../utils/pb";
 import { Collections, type SvgsRecord } from "../../utils/pocketbase-types";
+import { ui } from "../../i18n/ui.js";
+
+const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
 
 const id = Astro.params.id;
 const svg: SvgsRecord = await pb.collection(Collections.Svgs).getOne(id);
@@ -15,18 +18,18 @@ try {
 }
 ---
 
-<Layout>
+<Layout title="{ui[locale].generator.title}">
   <div class="flex flex-col h-screen">
     <div
       class="bg-base-200 h-1/2 flex flex-col justify-center items-center p-4"
     >
-      <h2 class="text-lg font-bold mb-2">Aperçu du SVG</h2>
+      <h2 class="text-lg font-bold mb-2">{ui[locale].generator.title}</h2>
       <div id="svg-preview" class="w-full flex justify-center">
         <div set:html={svg?.code_svg} />
       </div>
     </div>
 
-    <div class="divider">Historique du Chat</div>
+    <div class="divider">{ui[locale].generator.chatHistory}</div>
 
     <div
       id="chat-history"
@@ -47,7 +50,7 @@ try {
             </div>
           ))
         ) : (
-          <span class="text-error">Aucun historique de chat.</span>
+          <span class="text-error">{ui[locale].generator.chatNoHistory}</span>
         )
       }
     </div>
@@ -69,10 +72,10 @@ try {
           name="editPrompt"
           type="text"
           class="input input-bordered flex-grow"
-          placeholder="Entrez un prompt pour éditer le SVG..."
+          placeholder="{ui[locale].generator.editPromptLabel}"
           required
         />
-        <button class="btn btn-primary" type="submit">Edit</button>
+        <button class="btn btn-primary" type="submit">{ui[locale].generator.editButton}</button>
       </div>
     </form>
   </div>
