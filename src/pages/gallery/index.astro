@@ -28,6 +28,12 @@ const svgs = await pb.collection(Collections.Svgs).getFullList();
             >
               Copier le code SVG
             </button>
+            <a
+              class="btn btn-sm btn-primary ml-2"
+              href={`/gallery/${s.id}`}
+            >
+              Voir le détail
+            </a>
           </div>
         ))}
       </div>
