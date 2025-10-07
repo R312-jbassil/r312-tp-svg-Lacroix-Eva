@@ -6,25 +6,24 @@ import { Collections } from "../../utils/pocketbase-types";
 import { ui } from "../../i18n/ui.js";
 
 const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
-
-const svgs = await pb.collection(Collections.Svgs).getFullList();
-
 const user = Astro.locals.user; // Récupère l'utilisateur connecté
+
+// Récupère seulement les SVGs de cet utilisateur
 const svgList = await pb.collection(Collections.Svgs).getFullList({
-  sort: "-created", // Trie les SVGs du plus récent au plus ancien
-  filter: `user = "${user.id}"`, // Filtre pour n'afficher que les SVGs de l'utilisateur
+  sort: "-created",
+  filter: `user = "${user.id}"`,
 });
 ---
 
-<Layout title="{ui[locale].gallery.title}">
+<Layout title={ui[locale].gallery.title}>
   <h1 class="text-2xl font-bold mb-4">{ui[locale].gallery.title}</h1>
 
   {
-    svgs.length === 0 ? (
+    svgList.length === 0 ? (
       <p class="text-gray-500">{ui[locale].gallery.noSvgs}</p>
     ) : (
       <div class="grid grid-cols-2 gap-4">
-        {svgs.map((s) => (
+        {svgList.map((s) => (
           <div class="border rounded-xl p-4 bg-base-200">
             <h2 class="font-semibold mb-2">{s.name}</h2>
             <div class="svg-container mb-2" set:html={s.code_svg} />
