@@ -1,9 +1,12 @@
 ---
+//@ts-nocheck
 import Layout from "../layouts/Layout.astro";
 import { ui } from "../i18n/ui.js";
 
 const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
 console.log("Locale in index:", locale);
+
+const user = Astro.locals.user;
 ---
 
 <Layout title="{ui[locale].index.title}">

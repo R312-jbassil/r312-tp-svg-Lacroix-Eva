@@ -17,7 +17,6 @@ const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
   <body class="h-full">
     <header>
       <nav class="navbar bg-base-200 shadow-md px-6">
-        
         <div class="flex-1">
           <a href="/" class="btn btn-ghost text-xl">
             {ui[locale].nav.home}
@@ -31,8 +30,13 @@ const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
           <a href="/gallery" class="btn btn-secondary">
             {ui[locale].nav.gallery}
           </a>
+          <form method="POST" action="/api/logout" class="m-0 p-0 ml-4">
+            <button type="submit" class="btn btn-primary"
+              >{ui[locale].nav.logout}</button
+            >
+          </form>
 
-            <form method="POST" action={Astro.url.pathname}>
+          <form method="POST" action={Astro.url.pathname}>
             <select
               name="language"
               class="select"
@@ -42,8 +46,7 @@ const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
               <option value="en" selected={locale === "en"}>English</option>
               <option value="fr" selected={locale === "fr"}>Français</option>
             </select>
-            </form>
-
+          </form>
         </div>
       </nav>
     </header>

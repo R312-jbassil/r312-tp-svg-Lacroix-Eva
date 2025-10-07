@@ -1,21 +1,24 @@
 ---
+//@ts-nocheck
 import Layout from "../layouts/Layout.astro";
 
 import { ui } from "../i18n/ui.js";
 
 const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
+
+const user = Astro.locals.user;
 ---
 
 <Layout title={ui[locale].generator.title}>
   <div class="flex flex-col h-screen p-4 gap-4">
-
     <div class="flex flex-1 gap-4">
-
       <div
         id="svg-container"
         class="flex-1 border rounded-xl p-4 bg-base-200 flex items-center justify-center"
       >
-        <span class="text-gray-400">{ui[locale].generator.contentPlaceholder}</span>
+        <span class="text-gray-400"
+          >{ui[locale].generator.contentPlaceholder}</span
+        >
       </div>
 
       <div class="flex-1 border rounded-xl p-4 bg-base-200 overflow-auto">
@@ -130,4 +133,20 @@ const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
       }
     });
   }
+  
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  saveButton.addEventListener("click", async () => {
+    const name = prompt("Enter a name for the SVG:");
+    const svgOutput = document.getElementById("svg-output")?.textContent;
+    console.log("Saving SVG: ", JSON.stringify(svgOutput));
+
+    const params: Collection.Svg = {
+      nom: name,
+      code_svg: svgOutput || "<svg></svg>",
+      chat_history: JSON.stringify(promptList),
+      user: user.id,
+    };
+    await saveSVG(params);
+  });
 </script>

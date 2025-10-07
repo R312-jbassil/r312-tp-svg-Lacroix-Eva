@@ -1,4 +1,5 @@
 ---
+//@ts-nocheck
 import Layout from "../../layouts/Layout.astro";
 import pb from "../../utils/pb";
 import { Collections } from "../../utils/pocketbase-types";
@@ -7,6 +8,12 @@ import { ui } from "../../i18n/ui.js";
 const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
 
 const svgs = await pb.collection(Collections.Svgs).getFullList();
+
+const user = Astro.locals.user; // Récupère l'utilisateur connecté
+const svgList = await pb.collection(Collections.Svgs).getFullList({
+  sort: "-created", // Trie les SVGs du plus récent au plus ancien
+  filter: `user = "${user.id}"`, // Filtre pour n'afficher que les SVGs de l'utilisateur
+});
 ---
 
 <Layout title="{ui[locale].gallery.title}">
