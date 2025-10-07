@@ -30,6 +30,21 @@ export const ui = {
         viewDetails: 'View Details',
         noSvgs: 'No SVGs saved yet.',
         copyButton: 'Copy SVG Code',
+    },
+    signup: {
+        title: 'Sign Up',
+        username: 'Username',
+        email: 'Email',
+        password: 'Password',
+        button: 'Create Account',
+        alreadyHaveAccount: 'Already have an account?',
+    },
+  login: {
+      title: 'Login',
+      email: 'Email',
+      password: 'Password',
+      button: 'Log In',
+      noAccount: "Don't have an account?",
     }
   },
   fr: {
@@ -63,6 +78,21 @@ export const ui = {
         viewDetails: 'Voir les détails',
         noSvgs: 'Aucun SVG enregistré pour le moment.',
         copyButton: 'Copier le code SVG',
-    }
-  },
-} 
+    },
+    signup: {
+        title: 'Inscription',
+        username: "Nom d'utilisateur",
+        email: 'Email',
+        password: 'Mot de passe',
+        button: 'Créer un compte',
+        alreadyHaveAccount: 'Déjà un compte ?',
+      },
+  login: {
+      title: 'Connexion',
+      email: 'Email',
+      password: 'Mot de passe',
+      button: 'Se connecter',
+      noAccount: "Pas de compte ?",
+    },
+  }
+}

@@ -20,8 +20,31 @@ if (user) {
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Connexion</title>
+    <title>{ui[locale].login.title}</title>
   </head>
+  <header
+    class="w-full flex justify-end p-4 bg-base-200 shadow-md rounded-b-lg"
+  >
+    <form
+      method="POST"
+      action={Astro.url.pathname}
+      class="flex items-center gap-2"
+    >
+      <label for="language" class="font-semibold text-primary"
+        >{ui[locale].nav.language}:</label
+      >
+      <select
+        id="language"
+        name="language"
+        class="select select-bordered select-primary"
+        onchange="this.form.submit()"
+      >
+        <option disabled>{ui[locale].nav.language}</option>
+        <option value="en" selected={locale === "en"}>English</option>
+        <option value="fr" selected={locale === "fr"}>Français</option>
+      </select>
+    </form>
+  </header>
   <div
     class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary"
   >
@@ -30,35 +53,35 @@ if (user) {
         <h1
           class="card-title text-4xl mb-6 justify-center text-center text-primary font-bold"
         >
-          Connexion
+          {ui[locale].login.title}
         </h1>
         <!-- Formulaire de connexion -->
         <form id="login-form" class="flex flex-col gap-5">
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder={ui[locale].login.email}
             required
             class="input input-bordered input-primary w-full"
           />
           <input
             type="password"
             name="password"
-            placeholder="Mot de passe"
+            placeholder={ui[locale].login.password}
             required
             class="input input-bordered input-primary w-full"
           />
           <button type="submit" class="btn btn-primary w-full btn-lg">
-            Se connecter
+            {ui[locale].login.button}
           </button>
         </form>
         <p id="status" class="mt-4 text-center text-error"></p>
         <p class="mt-2 text-center">
-          Pas de compte ? <a href="/signup" class="link link-primary"
-            >Créer un compte</a
+          {ui[locale].login.noAccount} <a href="/signup" class="link link-primary"
+            >{ui[locale].signup.button}</a
           >
         </p>
-        <!-- Zone d'affichage du statut -->
+        
         <p id="status" class="mt-4 text-center text-error font-semibold"></p>
       </div>
     </div>

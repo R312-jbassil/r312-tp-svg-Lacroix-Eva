@@ -5,6 +5,7 @@ import { ui } from "../i18n/ui.js";
 const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
 
 import Layout from "../layouts/Layout.astro";
+import { ui } from "../i18n/ui.js";
 
 const user = Astro.locals.user;
 
@@ -20,8 +21,23 @@ if (Astro.locals.user) {
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Inscription</title>
+    <title>{ui[locale].signup.title}</title>
   </head>
+<header class="w-full flex justify-end p-4 bg-base-200 shadow-md rounded-b-lg">
+    <form method="POST" action={Astro.url.pathname} class="flex items-center gap-2">
+        <label for="language" class="font-semibold text-primary">{ui[locale].nav.language}:</label>
+        <select
+            id="language"
+            name="language"
+            class="select select-bordered select-primary"
+            onchange="this.form.submit()"
+        >
+            <option disabled>{ui[locale].nav.language}</option>
+            <option value="en" selected={locale === "en"}>English</option>
+            <option value="fr" selected={locale === "fr"}>Français</option>
+        </select>
+    </form>
+</header>
   <div
     class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 to-secondary"
   >
@@ -30,39 +46,40 @@ if (Astro.locals.user) {
         <h1
           class="card-title text-4xl mb-6 justify-center text-center text-primary font-bold"
         >
-          Inscription
+          {ui[locale].signup.title}
         </h1>
         <form id="signup-form" class="flex flex-col gap-5">
           <input
             type="text"
             name="username"
-            placeholder="Nom d'utilisateur"
+            placeholder={ui[locale].signup.username}
             required
             class="input input-bordered input-primary w-full"
           />
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder={ui[locale].signup.email}
             required
             class="input input-bordered input-primary w-full"
           />
           <input
             type="password"
             name="password"
-            placeholder="Mot de passe"
+            placeholder={ui[locale].signup.password}
             required
             class="input input-bordered input-primary w-full"
           />
 
           <button type="submit" class="btn btn-primary w-full btn-lg"
-            >Créer un compte</button
+            >{ui[locale].signup.button}</button
           >
         </form>
         <p id="status" class="mt-4 text-center text-error"></p>
         <p class="mt-2 text-center">
-          Déjà un compte ? <a href="/login" class="link link-primary"
-            >Se connecter</a
+          {ui[locale].signup.alreadyHaveAccount}
+          <a href="/login" class="link link-primary"
+            >{ui[locale].login.button}</a
           >
         </p>
       </div>
@@ -98,5 +115,6 @@ if (Astro.locals.user) {
       }
     });
   </script>
+
 
 </html>
