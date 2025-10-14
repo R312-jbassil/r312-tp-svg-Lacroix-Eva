@@ -6,9 +6,9 @@ import { Collections } from "../../utils/pocketbase-types";
 import { ui } from "../../i18n/ui.js";
 
 const locale = (Astro.locals.lang as "en" | "fr") ?? "en";
-const user = Astro.locals.user; // Récupère l'utilisateur connecté
+const user = Astro.locals.user;
 
-// Récupère seulement les SVGs de cet utilisateur
+// Récupère uniquement les SVGs de l'utilisateur connecté
 const svgList = await pb.collection(Collections.Svgs).getFullList({
   sort: "-created",
   filter: `user = "${user.id}"`,
@@ -22,26 +22,39 @@ const svgList = await pb.collection(Collections.Svgs).getFullList({
     svgList.length === 0 ? (
       <p class="text-gray-500">{ui[locale].gallery.noSvgs}</p>
     ) : (
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {svgList.map((s) => (
-          <div class="border rounded-xl p-4 bg-base-200">
-            <h2 class="font-semibold mb-2">{s.name}</h2>
-            <div class="svg-container mb-2" set:html={s.code_svg} />
+          <div class="border rounded-xl p-4 bg-base-200 flex flex-col">
+            <div class="flex justify-between items-start mb-2">
+              <h2 class="font-semibold">{s.name}</h2>
+              <span class="text-xs text-gray-500">{new Date(s.created).toLocaleDateString()}</span>
+            </div>
+
+            <div class="svg-container mb-2 flex justify-center items-center border rounded p-2" set:html={s.code_svg} />
+
             <pre class="bg-gray-100 p-2 rounded text-xs overflow-x-auto mb-2">
               {s.code_svg}
             </pre>
 
-            <button
-              class="btn btn-sm btn-outline"
-              type="button"
-              onclick={`navigator.clipboard.writeText(${JSON.stringify(s.code_svg)})`}
-            >
-              {ui[locale].gallery.copyButton}
-            </button>
-
-            <a class="btn btn-sm btn-primary ml-2" href={`/gallery/${s.id}`}>
-              {ui[locale].gallery.viewDetails}
-            </a>
+            <div class="flex flex-wrap gap-2">
+              <!-- Copier le code -->
+              <button
+                class="btn btn-sm btn-outline"
+                type="button"
+                onclick={`navigator.clipboard.writeText(${JSON.stringify(s.code_svg)})`}
+              >
+                {ui[locale].gallery.copyButton}
+              </button>
+              
+              <!-- Télécharger le SVG -->
+              <a
+                class="btn btn-sm btn-primary"
+                href={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(s.code_svg)}`}
+                download={`${s.name || "svg"}.svg`}
+              >
+                Télécharger
+              </a>
+            </div>
           </div>
         ))}
       </div>
